@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<title>سيبر للحرب والتكتيك</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal&amp;display=swap" rel="stylesheet"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+.owner-role {
+  font-size: 14px;
+  color: #DDA0DD; /* البنفسجي الفاتح (بنك) */
+  font-weight: bold;
+  margin-top: 5px; /* مسافة بسيطة من الاسم */
+}
+
+
+
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(15, 15, 15, 0.95);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.7);
+      direction: ltr;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ff3333;
+      letter-spacing: 1.2px;
+      direction: rtl;
+    }
+
+    nav {
+      display: flex;
+      gap: 25px;
+      direction: rtl;
+    }
+
+    
+nav a {
+    color: #eee;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 14px 28px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    user-select: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+
+    
+nav a:hover,
+nav a:focus {
+    background-color: black;
+    color: #ff0000;
+    box-shadow: 0 0 25px #ff0000;
+    transform: scale(1.05);
+    outline: none;
+}
+
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      right: 0;
+      left: 0;
+      height: 3px;
+      background: #ff4444;
+      border-radius: 3px;
+      opacity: 0;
+      transform: scaleX(0);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    nav a:hover::after,
+    nav a:focus::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    .container {
+      margin-top: 100px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      flex-grow: 1;
+    }
+
+    .hero-section {
+      text-align: center;
+      padding: 80px 20px 40px;
+      margin-top: 80px;
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 2px 2px 10px black;
+    }
+
+    .hero-title span {
+      color: #ff0000;
+      font-size: 54px;
+    }
+
+    .hero-buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background-color: #ff0000;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: 700;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      user-select: none;
+      min-width: 180px;
+      text-align: center;
+    }
+
+    .btn:hover,
+    .btn:focus {
+      background-color: black;
+      color: #ff0000;
+      box-shadow: 0 0 25px #ff0000;
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    /* ======= قسم طاقم الإدارة ======= */
+
+    .management-section {
+      width: 100%;
+      max-width: 1200px;
+      background: transparent !important;
+      padding: 0 10px 50px;
+      margin-top: 60px;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: 900;
+      color: #ff0000;
+      margin-bottom: 30px;
+      text-align: center;
+      text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
+      user-select: none;
+    }
+
+    /* أصحاب السيرفر - صف 3 */
+    .owners-container {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      flex-wrap: nowrap;
+      margin-bottom: 60px;
+    }
+
+    .owner-box {
+      flex: 1 1 0;
+      max-width: 300px;
+      text-align: center;
+      user-select: none;
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+
+    .owner-box:hover {
+      transform: scale(1.05);
+    }
+
+    .owner-img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 3px solid #ff0000;
+      object-fit: cover;
+      box-shadow: 0 0 25px #ff0000;
+      margin: 0 auto 15px;
+      display: block;
+    }
+
+/* تلوين اسم الشخص بالأصفر */
+.owner-name {
+  color: #FFD700; /* الأصفر الجميل */
+  font-weight: bold; /* خط عريض */
+}
+
+    .discord-tag {
+      font-size: 16px;
+      color: #ff4d4d;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+      user-select: text;
+    }
+
+    /* الإداريون - شبكة مرنة */
+    .admins-container {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      flex-wrap: nowrap;
+      margin-bottom: 60px;
+    }
+
+    .admin-box {
+      padding: 15px 10px;
+      flex: 1 1 0;
+      max-width: 210px;
+      text-align: center;
+      user-select: none;
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+
+    .admin-box:hover {
+      transform: scale(1.05);
+    }
+
+    .admin-img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 3px solid #ff0000;
+      object-fit: cover;
+      box-shadow: 0 0 20px #ff0000;
+      margin: 0 auto 10px;
+      display: block;
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+
+    .admin-img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 35px #ff5555;
+    }
+
+    .admin-name {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 5px;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(255, 0, 0, 0.8);
+    }
+
+    /* تجاوب */
+    @media (max-width: 950px) {
+      .owners-container {
+        flex-wrap: wrap;
+        gap: 30px;
+      }
+      .owner-box {
+        max-width: 45%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .owners-container {
+        flex-direction: column;
+        align-items: center;
+        max-width: 100%;
+      }
+      .owner-box {
+        max-width: 100%;
+        width: 280px;
+      }
+      .admin-box {
+        width: 100%;
+        max-width: 350px;
+      }
+      .btn {
+        min-width: auto;
+        width: 100%;
+      }
+    }
+
+    /* الأنيميشن للعنوان */
+    .animated-typing {
+      animation: crackEffect 2s infinite alternate;
+      text-shadow:
+        -2px -2px 0 black,
+        2px -2px 0 black,
+        -2px  2px 0 black,
+        2px  2px 0 black;
+    }
+
+    @keyframes crackEffect {
+      0%, 100% {
+        transform: skewX(0deg);
+      }
+      50% {
+        transform: skewX(-5deg);
+      }
+    }
+
+    .animated-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+      white-space: nowrap;
+      border-right: 3px solid white;
+      width: 280px;
+      overflow: hidden;
+      direction: ltr;
+      text-align: center;
+      margin-top: 10px;
+      margin-inline: auto;
+      animation: typing 4s steps(30) infinite alternate,
+                 blink 0.75s step-end infinite;
+      user-select: none;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 280px; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+  
+.emoji-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 6px;
+    opacity: 0;
+    animation: emojiFade 1.2s ease-in-out forwards;
+}
+
+@keyframes emojiFade {
+    0% { opacity: 0; transform: translateY(-5px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+       footer {
+    background-color: rgba(15, 17, 22, 0.0); /* شفاف */
+    padding: 0px 60px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #1c1e26;
+}
+
+.footer-icons {
+    margin-right: 700px;
+}
+
+.footer-icons img {
+    width: 30px;
+    margin-left: 30px;
+    opacity: 0.9;
+    cursor: pointer;
+    transition: transform 0.7s ease;
+}
+.footer-icons img:hover {
+    transform: scale(6.1) rotate(5deg);
+}
+
+.footer-logo {
+    height: 100px;
+}
+
+<style>
+  .copyright {
+    color: #888;
+    font-size: 13px;
+    margin-top: 10px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+ 
+</style>
+
+<div class="copyright" id="copyright">
+  © 2025 Copyright <strong style="color:white">Syper</strong>. Developed by H25
+</div>
+
+</style>
+</head>
+<body>
+<header>
+<div class="logo">Syper Tactic</div>
+<nav>
+<a href="index.html"> <img class="emoji-icon" src="home.png"/> الرئيسية</a>
+<a href="rules.html"> <img class="emoji-icon" src="rules.png"/> القوانين</a>
+<a href="store.html"> <img class="emoji-icon" src="store.png"/> المتجر</a>
+<a class="btn-scroll" href="management.html"> <img class="emoji-icon" src="RyV_Support1.png"/> طاقم الإدارة</a>
+<a href="https://discord.gg/Yt2DzK6T" target="_blank"> <img class="emoji-icon" src="discord.png"/> ربط الديسكورد</a>
+</nav>
+</header>
+<main class="container">
+<!-- بداية روم طاقم الإدارة -->
+<section class="management-section" id="management">
+<!-- أصحاب السيرفر -->
+<section aria-label="أصحاب السيرفر" style="margin-top: 50px;">
+<div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">
+<img alt="Founder" src="emoji.png" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"/>
+<h2 class="section-title" style="margin: 0; color: white;">Founder</h2>
+</div>
+<div class="owners-container">
+<!-- Mohammed -->
+<div class="owner-box">
+<img alt="صاحب السيرفر 3" class="owner-img" src="Mohammed.png">
+<h3 class="owner-name">
+        Mohammed
+        <img alt="رمز" src="emoji.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;">
+</img></h3>
+<p class="owner-role">Head of Community</p>
+<p class="discord-tag">Discord: projectmohammed.dll</p>
+<a href="https://discord.com/users/1188185764496937030" style="display:inline-block; margin-top: 10px; padding: 5px 15px; background: linear-gradient(to right, #7289da, #99aab5); border-radius: 10px; color: white; text-decoration: none; font-size: 14px;" target="_blank">
+         تواصل على الديسكورد
+      </a>
+</img></div>
+<!-- Mazen -->
+<div class="owner-box">
+<img alt="صاحب السيرفر 3" class="owner-img" src="Mazen.png">
+<h3 class="owner-name">
+        Mazen
+        <img alt="رمز" src="emoji.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;">
+</img></h3>
+<p class="owner-role">Head of Community</p>
+<p class="discord-tag">Discord: artrx_0</p>
+<a href="https://discord.com/users/1355347784777076950" style="display:inline-block; margin-top: 10px; padding: 5px 15px; background: linear-gradient(to right, #7289da, #99aab5); border-radius: 10px; color: white; text-decoration: none; font-size: 14px;" target="_blank">
+         تواصل على الديسكورد
+      </a>
+</img></div>
+<!-- Over -->
+<div class="owner-box">
+<img alt="صاحب السيرفر 3" class="owner-img" src="over.png">
+<h3 class="owner-name">
+        Over
+        <img alt="رمز" src="emoji.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;">
+</img></h3>
+<p class="owner-role">Head of Community</p>
+<p class="discord-tag">Discord: w.fp</p>
+<a href="https://discord.com/users/1063820791554256928" style="display:inline-block; margin-top: 10px; padding: 5px 15px; background: linear-gradient(to right, #7289da, #99aab5); border-radius: 10px; color: white; text-decoration: none; font-size: 14px;" target="_blank">
+         تواصل على الديسكورد
+      </a>
+</img></div>
+</div>
+</section>
+<!-- قسم المبرمجين -->
+<section aria-label="Developers" style="margin-top: 50px;">
+<div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">
+<img alt="Programmers" src="emoji3.png" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"/>
+<h2 class="section-title" style="margin: 0; color: white;">Programmers</h2>
+</div>
+<div class="admins-container">
+<!-- Sonny -->
+<div class="owner-box">
+<img alt="صاحب السيرفر 3" class="owner-img" src="Sonny.gif">
+<h3 class="owner-name">
+        Sonny
+      <img alt="رمز" src="emoji3.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;"/>
+</h3>
+<p class="owner-role">Server Director &amp; Developer</p>
+<p class="discord-tag">Discord: yousef_441</p>
+<a href="https://discord.com/users/1221865420328271914" style="display:inline-block; margin-top: 10px; padding: 5px 15px; background: linear-gradient(to right, #7289da, #99aab5); border-radius: 10px; color: white; text-decoration: none; font-size: 14px;" target="_blank">
+         تواصل على الديسكورد
+      </a>
+</img></div>
+<!-- Zaxar -->
+<div class="owner-box">
+<img alt="صاحب السيرفر 3" class="owner-img" src="zaxar.png"/>
+<h3 class="owner-name">
+        Zaxar
+        <img alt="رمز" src="emoji3.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;"/>
+</h3>
+<p class="owner-role">Developers</p>
+<p class="discord-tag">Discord: zaxar.dev</p>
+<a href="https://discord.com/users/1373988147570016307" style="display:inline-block; margin-top: 10px; padding: 5px 15px; background: linear-gradient(to right, #7289da, #99aab5); border-radius: 10px; color: white; text-decoration: none; font-size: 14px;" target="_blank">
+         تواصل على الديسكورد
+      </a>
+</div>
+</div>
+</section>
+<!-- الإداريون -->
+<section aria-label="Developers" style="margin-top: 50px;">
+<div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">
+<img alt="Programmers" src="junior.png" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"/>
+<h2 class="section-title" style="margin: 0; color: white;">Administration</h2>
+</div>
+<div class="admins-container">
+<!-- gold -->
+<div class="owner-box">
+<img alt="admin" class="owner-img" src="gold.png">
+<h3 class="owner-name">
+        GoLD[X]
+        <img alt="رمز" src="junior.png" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;"/>
+</h3>
+<p class="owner-role">Community Manager &amp; Head of Events</p>
+<p class="discord-tag">Discord: goldx5156</p>
+<a href="https://discord.com/users/1033350641969533039" style="display:inline-block; margin-top: 10px; padding: 5px 15px; background: linear-gradient(to right, #7289da, #99aab5); border-radius: 10px; color: white; text-decoration: none; font-size: 14px;" target="_blank">
+         تواصل على الديسكورد
+      </a>
+</img></div>
+</div>
+</section>
+</section>
+<footer>
+<img alt="Logo" class="footer-logo" src="logo-footer.png"/>
+<div class="copyright">
+        © 2025 Copyright <strong style="color:white">Syper</strong>. Developed by H25
+    </div>
+<div class="footer-icons">
+<a href="#"><img alt="YouTube" src="youtube.png"/></a>
+<a href="#"><img alt="Discord" src="discord.png"/></a>
+</div>
+</footer>
+</main></body></html>

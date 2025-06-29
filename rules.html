@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>قوانين Syper Tactic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset & base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ====== الشريط العلوي الرئيسي ====== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: rgba(15, 15, 15, 0.95);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.7);
+  transition: background 0.3s ease, padding 0.3s ease;
+  /* direction: ltr مهم عشان ترتيب flex */
+  direction: ltr;
+}
+    header.scrolled {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 8px 30px;
+      box-shadow: 0 3px 15px rgba(255, 0, 0, 0.7);
+    }
+
+    /* شعار الموقع */
+.logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ff3333;
+  letter-spacing: 1.2px;
+  direction: rtl;
+}
+
+    /* القائمة الرئيسية */
+nav {
+  display: flex;
+  gap: 25px;
+  direction: rtl;
+}
+
+
+
+    
+nav a {
+    color: #eee;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 14px 28px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    user-select: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+
+    
+nav a:hover,
+nav a:focus {
+    background-color: black;
+    color: #ff0000;
+    box-shadow: 0 0 25px #ff0000;
+    transform: scale(1.05);
+    outline: none;
+}
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      right: 0;
+      left: 0;
+      height: 3px;
+      background: #ff4444;
+      border-radius: 3px;
+      opacity: 0;
+      transform: scaleX(0);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    nav a:hover::after,
+    nav a:focus::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    /* المحتوى الرئيسي مع تباعد من الأعلى */
+    .container {
+      margin-top: 90px;
+      max-width: 1200px;
+      margin-inline: auto;
+      padding: 20px;
+      display: flex;
+      gap: 25px;
+      direction: rtl;
+    }
+
+    /* الشريط الجانبي */
+    .sidebar {
+      width: 220px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      user-select: none;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+      transition: box-shadow 0.3s ease;
+    }
+    .sidebar:hover {
+      box-shadow: 0 0 25px rgba(255, 0, 0, 0.5);
+    }
+
+    .sidebar button {
+      background-color: #ff0000;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      box-shadow: 0 2px 5px rgba(255, 0, 0, 0.4);
+      user-select: none;
+    }
+    .sidebar button:hover:not(:disabled) {
+      background-color: black;
+      color: #ff0000;
+      box-shadow: 0 2px 15px #ff0000;
+    }
+    .sidebar button:disabled {
+      background-color: #222;
+      color: gray;
+      cursor: not-allowed;
+      position: relative;
+      box-shadow: none;
+    }
+    .sidebar button:disabled .soon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #555;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #ccc;
+      user-select: none;
+    }
+
+    /* صندوق القوانين */
+    .rules {
+      flex-grow: 1;
+      background: rgba(0,0,0,0.6);
+      border-radius: 15px;
+      padding: 30px 30px;
+      height: calc(100vh - 130px);
+      overflow-y: auto;
+      box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
+    }
+
+    /* Scrollbar custom */
+    .rules::-webkit-scrollbar {
+      width: 8px;
+    }
+    .rules::-webkit-scrollbar-thumb {
+      background-color: #ff4d4d;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: content-box;
+    }
+    .rules::-webkit-scrollbar-track {
+      background: #1c1c1c;
+    }
+
+    /* القوانين - مخفي إفتراضيًا */
+    .rule-section {
+      display: none;
+    }
+    .rule-section.active {
+      display: block;
+    }
+
+    /* صناديق القوانين */
+    .rule-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255, 0, 0, 0.5);
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 22px;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.25);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      user-select: text;
+    }
+    .rule-box:hover {
+      background: rgba(255,255,255,0.1);
+      box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
+    }
+
+    /* العناوين */
+    .rule-box .title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #ff6666;
+      margin-bottom: 12px;
+      user-select: text;
+    }
+
+    /* نص الوصف */
+    .rule-box .desc {
+      color: #eee;
+      font-size: 15.5px;
+      line-height: 1.6;
+      user-select: text;
+    }
+
+    /* البادجات */
+    .badge {
+      background: #ff3333;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-left: 8px;
+      user-select: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 20px;
+      }
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
+      .container {
+        flex-direction: column;
+        margin-top: 120px;
+      }
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 10px;
+        gap: 12px;
+      }
+      .sidebar button {
+        flex: 1 1 45%;
+        max-width: 220px;
+        font-size: 14px;
+        padding: 10px;
+      }
+      .rules {
+        height: auto;
+        max-height: 600px;
+        margin-top: 20px;
+      }
+    }
+
+  
+.emoji-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 6px;
+    opacity: 0;
+    animation: emojiFade 1.2s ease-in-out forwards;
+}
+
+@keyframes emojiFade {
+    0% { opacity: 0; transform: translateY(-5px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<header id="mainHeader">
+  <div class="logo">Syper Tactic</div>
+  <nav>
+    <a href="index.html"> <img src="home.png" class="emoji-icon"> الرئيسية</a>
+    <a href="rules.html"> <img src="rules.png" class="emoji-icon"> القوانين</a>
+    <a href="store.html"> <img src="store.png" class="emoji-icon"> المتجر</a>
+    <a href="management.html" class="btn-scroll"> <img src="RyV_Support1.png" class="emoji-icon"> طاقم الإدارة</a>
+    <a href="https://discord.gg/Yt2DzK6T" target="_blank"> <img src="discord.png" class="emoji-icon"> ربط الديسكورد</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="sidebar">
+    <button onclick="showRules('discord')">قوانين الديسكورد</button>
+    <button onclick="showRules('server')">قوانين الخادم</button>
+    <button onclick="showRules('mute')">أوقات الميوت</button>
+    <button onclick="showRules('ban')">أوقات الحظر</button>
+    <button onclick="showRules('admin')">قوانين الإدارة</button>
+    <button onclick="showRules('factions')">المشرفين</button>
+    <button disabled><span class="soon">قريبًا</span> قسم إضافي</button>
+  </div>
+
+    <div class="rules">
+<!-- 1. قوانين الديسكورد -->
+<div class="rule-section active" id="discord">
+  <div class="rule-box">
+    <div class="title">1. احترام الجميع</div>
+    <div class="desc">يُمنع استخدام أي لغة مسيئة، مثل الشتائم أو الإهانات أو العنصرية. حافظ على بيئة محترمة للجميع.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="title">2. لا تُرسل سبام أو منشن عشوائي</div>
+    <div class="desc">الرسائل المكررة أو المنشن المفرط قد تؤدي إلى التحذير أو الميوت أو الطرد.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="title">3. <span class="badge">الحظر الدائم</span> ممنوع الإعلانات</div>
+    <div class="desc">يُمنع الإعلان عن سيرفرات، روابط، أو مواقع بدون إذن مسبق من الإدارة.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="title">4. اختر اسمًا وصورة شخصية محترمة</div>
+    <div class="desc">يُمنع استخدام أسماء أو صور مسيئة، عنصرية، جنسية أو استفزازية.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="title">5. لا تناقش مواضيع حساسة</div>
+    <div class="desc">مثل السياسة، الدين، أو المواضيع الجدلية. هذا للحفاظ على بيئة آمنة ومحترمة للجميع.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="title">6. التحرش بجميع أشكاله ممنوع</div>
+    <div class="desc">سواء كان لفظيًا، عبر الرسائل الخاصة، أو تلميحات غير لائقة – سيتم اتخاذ إجراء فوري.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="title">7. <span class="badge">الحظر الدائم</span> الابتزاز أو التهديد</div>
+    <div class="desc">أي تهديد أو محاولة ابتزاز سيتم التعامل معه بصرامة وحظر مباشر.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="title">8. لا تُرسل محتوى غير مناسب</div>
+    <div class="desc">يشمل ذلك النكات السخيفة، الصور أو الفيديوهات المزعجة، أو أي شيء لا علاقة له بالسيرفر.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="title">9. <span class="badge">الحظر الفوري</span> المحتوى الإباحي أو العنيف</div>
+    <div class="desc">يُمنع تمامًا نشر أي محتوى إباحي، دموي، عنيف، أو صادم.</div>
+  </div>
+
+  <div class="rule-box">
+    <div class="title">10. التزم بموضوع القناة</div>
+    <div class="desc">لكل قناة هدف، تأكد من أنك تكتب أو ترسل في المكان الصحيح لتجنب الفوضى.</div>
+  </div>
+</div>
+
+
+<!-- 2. قوانين الخادم -->
+<div class="rule-section" id="server">
+  <div class="rule-box">
+    <div class="title">1. الاحترام المتبادل</div>
+    <div class="desc">عامل الجميع باحترام. نرفض السلوك الساخر أو الاستفزازي.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">2. الإساءة للسيرفر</div>
+    <div class="desc">يُمنع منعًا باتًا التلفظ بأي سب أو تقليل احترام تجاه السيرفر، ويُعرض المخالف لحظر مباشر دون إنذار.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">3. الحسابات المتعددة</div>
+    <div class="desc">ممنوع استخدام أكثر من حساب. المخالفة تعني حظر دائم.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">4. استغلال الثغرات</div>
+    <div class="desc">أي استغلال للأخطاء سيؤدي لحظر. أبلغ عنها فورًا.</div>
+  </div>
+</div>
+
+<!-- 3. أوقات الحظر -->
+<div class="rule-section" id="ban">
+  <div class="rule-box">
+    <div class="title">1. <span class="badge">حظر 30 يومًا</span> سب السيرفر</div>
+    <div class="desc">التلفظ بألفاظ مسيئة أو التهجم على السيرفر.</div>
+  </div>
+<div class="rule-box">
+  <div class="title">2. <span class="badge">حظر 15 يومًا</span> النشر المتعمد</div>
+  <div class="desc">ذكر أسماء سيرفرات أخرى أو نشر روابطها عن عمد للإعلان داخل السيرفر.</div>
+</div>
+  <div class="rule-box">
+    <div class="title">3. <span class="badge">حظر 14 يومًا</span> استخدام برامج الغش</div>
+    <div class="desc">استخدام أي أدوات غش تمنح ميزة غير عادلة.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">4. <span class="badge">حظر 7 أيام</span> سب الأهل</div>
+    <div class="desc">إذا سببت عائلة أي لاعب، سيتم إعطاؤك ميوت، وإذا كررت ذلك سيتم حظر.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">5. <span class="badge">حظر 5 أيام</span> استغلال الغلتشات</div>
+    <div class="desc">استخدام أو استغلال الأخطاء البرمجية للحصول على ميزة.</div>
+  </div>
+  
+  <p style="margin-top: 15px; font-weight: bold; color: #c0392b;">
+    في حالة تكرار المخالفة، يتم تصعيد العقوبة تدريجيًا وقد تصل إلى حظر دائم أو مدة أطول حسب خطورة السلوك.
+  </p>
+</div>
+
+
+<!-- 4. أوقات الميوت -->
+<div class="rule-section" id="mute">
+  <div class="rule-box">
+    <div class="title">1. <span class="badge">ميوت مؤبد</span> سب الرب</div>
+    <div class="desc">يُمنع تمامًا المساس بالدين أو استخدام كلمات تمس العقيدة بشكل مسيء. المخالفة تؤدي إلى ميوت دائم دون تحذير.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">2. <span class="badge">ميوت 24 ساعة</span> سب الإدارة</div>
+    <div class="desc">إهانة أي فرد من الإدارة تؤدي إلى ميوت يوم كامل، مع تصعيد العقوبة عند التكرار.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">3. <span class="badge">ميوت 12 ساعة</span> سب الأهل</div>
+    <div class="desc">أي إساءة موجهة لعائلة أحد اللاعبين، حتى لو كانت على سبيل المزاح، تُعاقب بميوت 12 ساعة أو أكثر.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">4. <span class="badge">ميوت 6 ساعات</span> تدخل في شؤون الإدارة</div>
+    <div class="desc">ممنوع الاعتراض أو التدخل في قرارات الإدارة، والمخالفة تؤدي إلى عقوبة مباشرة.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">5. <span class="badge">ميوت 3 ساعات</span> سب مباشر</div>
+    <div class="desc">يُمنع استخدام أي ألفاظ نابية تجاه اللاعبين أو الإدارة.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">6. <span class="badge">ميوت 2 ساعة</span> تشبيه بالحيوان</div>
+    <div class="desc">ألفاظ مثل "كلب، حمار، خروف..." تُعتبر إهانة وتُعاقب بميوت.</div>
+  </div>
+<div class="rule-box">
+  <div class="title">7. <span class="badge">تحذير أولًا ثم ميوت 1 ساعة</span> المزاح الثقيل أو المزعج</div>
+  <div class="desc">المزاح الزائد أو المزعج الذي يسبب استياء أو يضايق الآخرين يُعتبر مخالفة ويؤدي إلى تحذير ثم ميوت.</div>
+</div>
+  <div class="rule-box">
+    <div class="title">8. <span class="badge">ميوت 30 دقيقة</span> سب خفيف</div>
+    <div class="desc">تجنّب الألفاظ المسيئة حتى لو كانت بسيطة، لأنها تُؤثر على بيئة الشات.</div>
+  </div>
+ <div class="rule-box">
+   <div class="title">9. <span class="badge">تحذير أولًا ثم ميوت 10 دقائق</span> الاستفزاز</div>
+   <div class="desc">الاستفزاز المتعمد أو الردود المستفزة تؤدي إلى تحذير أولًا، وإذا تكررت تُعاقب بميوت لمدة 10 دقائق. تتصاعد العقوبة في حال التكرار المستمر.</div>
+ </div>
+  <div class="rule-box">
+    <div class="title">10. <span class="badge">ميوت 15 دقيقة + تحذير</span> تكرار المخالفة</div>
+    <div class="desc">إذا تم تكرار نفس السلوك المخالف، سيتم التصعيد تدريجيًا، وقد يصل إلى ميوت دائم أو باند.</div>
+  </div>
+
+  <p style="margin-top: 15px; font-weight: bold; color: #c0392b;">
+    ⚠️ ملاحظة: أي تكرار في المخالفات قد يؤدي إلى زيادة مدة الميوت أو التحويل إلى الحظر (BAN) حسب تقدير الإدارة.
+  </p>
+</div>
+
+
+
+<!-- 5. المشرفين -->
+<div class="rule-section" id="factions">
+  <div class="rule-box">
+    <div class="title">1. <span class="badge">Owner</span> Sonny</div>
+    <div class="desc">مسؤول السيرفر بكامل الصلاحيات.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">2. <span class="badge">Owner</span> Zaxar</div>
+    <div class="desc">مسؤول السيرفر بكامل الصلاحيات.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">3. <span class="badge">Owner</span> Mohammed</div>
+    <div class="desc">مسؤول السيرفر بكامل الصلاحيات.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">4. <span class="badge">Staff-Manager</span> Mazen</div>
+    <div class="desc">مسؤول عن فريق الإدارة.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">5. <span class="badge">Event-Manager</span> Over</div>
+    <div class="desc">مسؤول الفعاليات.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">6. <span class="badge">Event-Manager</span> GoLD</div>
+    <div class="desc">مسؤول الفعاليات.</div>
+  </div>
+</div>
+
+<!-- 6. قوانين الإدارة -->
+<div class="rule-section" id="admin">
+  <div class="rule-box">
+    <div class="title">1. أي مشكلة بين إداريين تؤدي إلى ورن لكلا الطرفين</div>
+    <div class="desc">في حالة تكرار سحب رتبة يُطرد المخطئ.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">2. عدم احترام الرتبة العليا</div>
+    <div class="desc">تحذير شفهي أولًا، ثم ورن، ثم الطرد عند التكرار.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">3. يمنع طلب الترقية</div>
+    <div class="desc">الترقية حسب تقدير الإدارة وتفاعل العضو.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">4. <span class="badge">سحب رتبة</span> ممنوع السب في سبب الصك</div>
+    <div class="desc">السب يؤدي لتحذير، التكرار للطرد.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">5. يمنع استغلال الرتبة</div>
+    <div class="desc">كإعطاء أسلحة أو مزايا بدون إذن.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">6. <span class="badge">سحب رتبة</span> ممنوع استعمال F1 إلا للمسؤولين الفعاليات</div>
+    <div class="desc">استخدام F1 مقتصر على فعاليات محددة.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">7. <span class="badge">سحب رتبة</span> يمنع السب بأي شكل</div>
+    <div class="desc">في شات ديسكورد، شات اللعبة، أو شات الإدارة.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">8. التكلم باحترام مع الإدارة</div>
+    <div class="desc">يزيد من فرص ترقيتك.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">9. الغياب لأكثر من يومين</div>
+    <div class="desc">من دون عذر مقبول يؤدي إلى الإزالة.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">10. <span class="badge">سحب رتبة</span> ممنوع التصرّف كمسؤول على أصحاب الرتب الأعلى</div>
+    <div class="desc">الإداريون الأعلى معروفون، ولا تتجاوز صلاحياتك.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">11. ممنوع تغيير الاسم بدون إذن الإدارة</div>
+    <div class="desc">الاسم ثابت إلا بموافقة مسبقة.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">12. الالتزام بنظام الصك</div>
+    <div class="desc">لتجنب الطرد عند المخالفة.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">13. يمنع المزاح الحاد</div>
+    <div class="desc">مثل الألقاب الجارحة أو التعبيرات المسيئة.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">14. احترام جميع اللاعبين</div>
+    <div class="desc">للحفاظ على بيئة صحية داخل الخادم.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">15. عدم الإساءة إلى السيرفر</div>
+    <div class="desc">مثل "إدارة تعبانة" أو أي تعابير سلبية.</div>
+  </div>
+  <div class="rule-box">
+    <div class="title">16. عدم احترام هذه القوانين</div>
+    <div class="desc">يؤدي مباشرة للطرد من الإدارة.</div>
+  </div>
+  
+</div>
+
+
+<script>
+  function showRules(id) {
+    document.querySelectorAll('.rule-section').forEach(section => {
+      section.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+  }
+
+  // إضافة تأثير تغيير الشريط عند التمرير
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('mainHeader');
+    if(window.scrollY > 30) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+</script>
+
+</body>
+</html>
